@@ -1,0 +1,5 @@
+newspaper3k==0.2.8
+nltk==3.4.5
+numpy==1.18.2
+PyAudio==0.2.11
+PyQt5==5.13.2
