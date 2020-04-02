@@ -109,8 +109,8 @@
    <widget class="QPushButton" name="record_button">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>430</y>
+      <x>120</x>
+      <y>410</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -127,8 +127,8 @@
    <widget class="QPushButton" name="stop_button">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>430</y>
+      <x>560</x>
+      <y>410</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -145,9 +145,9 @@
    <widget class="QTextBrowser" name="sentence_box">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>190</y>
-      <width>631</width>
+      <x>90</x>
+      <y>200</y>
+      <width>611</width>
       <height>192</height>
      </rect>
     </property>
@@ -160,8 +160,8 @@
    <widget class="QPushButton" name="next_button">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>190</y>
+      <x>710</x>
+      <y>220</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -180,7 +180,7 @@
      <rect>
       <x>40</x>
       <y>160</y>
-      <width>91</width>
+      <width>81</width>
       <height>21</height>
      </rect>
     </property>
@@ -192,13 +192,13 @@
      </font>
     </property>
     <property name="text">
-     <string>Sentence:</string>
+     <string>Sentence</string>
     </property>
    </widget>
    <widget class="QTextBrowser" name="status_box">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>310</x>
       <y>470</y>
       <width>131</width>
       <height>31</height>
@@ -208,7 +208,7 @@
    <widget class="QLabel" name="status_label">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>350</x>
       <y>450</y>
       <width>47</width>
       <height>13</height>
@@ -241,6 +241,44 @@
     </property>
     <property name="text">
      <string>Export Template Data</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="prev_button">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Prev</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="numsen_label">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>160</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>  /   :</string>
     </property>
    </widget>
   </widget>

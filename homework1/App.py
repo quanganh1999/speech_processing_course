@@ -72,7 +72,8 @@ class speech_ctl:
             self.curIdxSen = 0
             self.view.sentence_box.setText(self.lst_sentence[self.curIdxSen])            
             self.view.status_box.clear() # clear status
-            self._setExport()
+            self.view.numsen_label.setText(f"  1/{len(self.lst_sentence)}:")
+            self._setExport()            
         except Exception as err:
             print(str(err.args))
             self.show_msg("Warning", "Fail to get content")
@@ -87,10 +88,26 @@ class speech_ctl:
         if(self.curIdxSen + 1 == len(self.lst_sentence)):
             self.show_msg("Noti", "This is the last sentence")
         else:
-            self.curIdxSen = self.curIdxSen + 1            
-            self.view.status_box.clear() # clear status
+            self.curIdxSen = self.curIdxSen + 1         
+            self.view.numsen_label.setText(f"  {self.curIdxSen + 1}/{len(self.lst_sentence)}:")   
+            self.view.status_box.clear() # clear status            
             self.view.sentence_box.setText(self.lst_sentence[self.curIdxSen])        
     
+    # Getting prev sentence
+    def _setPrevBut(self):      
+        if(self.check_record()):
+            return
+        if(len(self.lst_sentence) == 0):
+            self.show_msg("Warning", "No data to show")
+            return 
+        if(self.curIdxSen - 1 < 0):
+            self.show_msg("Noti", "This is the first sentence")
+        else:
+            self.curIdxSen = self.curIdxSen - 1       
+            self.view.numsen_label.setText(f"  {self.curIdxSen + 1}/{len(self.lst_sentence)}:")        
+            self.view.status_box.clear() # clear status
+            self.view.sentence_box.setText(self.lst_sentence[self.curIdxSen])
+
     # Setting start recording 
     def _setRecBut(self):        
         self.check_record()        
@@ -110,20 +127,20 @@ class speech_ctl:
     def _setExport(self):
         if(len(self.lst_sentence) == 0):
             self.show_msg("Warning", "No data to export")
-            return     
-        print(len(self.lst_sentence))   
+            return             
         file_out = open(f"{self.pathOut}\\template_data.txt", "w", encoding="utf-8")
         file_out.write(self.curURL)
         for id in range(len(self.lst_sentence)):
             file_out.write(f"sentence_{id+1}.wav\n")
             file_out.write(f"{self.lst_sentence[id]}\n")
         file_out.close()
-        self.show_msg("Noti", "Success")
+        self.show_msg("Noti", "Success to export data")
 
     def _connectSignals(self):                
         self.view.set_button.clicked.connect(self._setPath)    # set button    
         self.view.start_button.clicked.connect(self._setStart) # start button
         self.view.next_button.clicked.connect(self._setNextBut) # next button
+        self.view.prev_button.clicked.connect(self._setPrevBut) # prev button
         self.view.record_button.clicked.connect(self._setRecBut) # record button
         self.view.stop_button.clicked.connect(self._setStopBut) # stop button
         self.view.export_button.clicked.connect(self._setExport) # export button

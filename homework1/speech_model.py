@@ -18,32 +18,51 @@ def get_sentences(url):
     content = ""
     title = ""
     response = rq.get(url)
+    if(response.status_code == 404):
+        raise Exception('Fail to connect')
     pageUrl = response.url  # get url
+    result = []
     if(response):
         resHtml = BeautifulSoup(response.content, 'lxml')        
-        title = resHtml.find('h1', class_='title_news_detail')        
-        contentHtml = resHtml.find('section', class_='sidebar_1')
+        resHtml = resHtml.find_all(class_ = re.compile('^sidebar_'))
+        mainHtml = None
+        for val in resHtml:
+            if(val.find(class_ = 'fck_detail') != None):
+                mainHtml = val
+                break
+        if mainHtml != None:
+            title = mainHtml.find('h1', class_='title_news_detail')
+            if(title != None):
+                title = title.text.strip()
+                title = title.replace(u'\xa0', ' ')
+                result.append(title)           
+            des = mainHtml.find('p', class_= 'description')
+            if(des != None):
+                des = des.text.strip()
+                des = des.replace(u'\xa0', ' ')
+                result.append(des)
+            contentHtml = mainHtml.find(class_='fck_detail')
+        else:
+            title = None
         # Error if this new has no content
         if(title is None or contentHtml is None):            
             # The web may change the format of html.
             # So it should use newspaper3k for this situation
             article = Article(url, language='vi')
-            article.download()
-            article.parse()
+            article.download()            
+            article.parse()            
             if article.text.strip() == '':
                 raise Exception('No content')
             else:
                 return sent_tokenize(article.text)
-        #The format of html is the same as the config 
-        title = title.text.strip()
-        title = title.replace(u'\xa0', ' ')
-        paragr = contentHtml.find_all('p', class_=re.compile(
-            "Normal|description"))  # get every paragraph
+        #The format of html is the same as the config                
+        paragr = contentHtml.find_all('p')
         for cktext in paragr:
             content += (cktext.text + " ")
         content = content.strip() 
         content = content.replace(u'\xa0', ' ')
-        return sent_tokenize(content)
+        result.extend(sent_tokenize(content))
+        return result
     else:
         raise Exception('Fail to connect')
 
