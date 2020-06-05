@@ -3,3 +3,4 @@ soundfile
 pydub
 librosa
 hmmlearn
+scikit-learn=0.22.1
