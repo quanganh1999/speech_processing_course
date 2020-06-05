@@ -67,10 +67,10 @@ if __name__ == '__main__':
     while True:  # making a loop
         print("Press space to start recording")
         keyboard.wait('space')               
-        record_sound("record.wav", duration=3)                
+        record_sound("record.wav", duration=2)                
         time.sleep(1)        
         myaudio = AudioSegment.from_wav("record.wav")
-        audios = silence.split_on_silence(myaudio, min_silence_len=600, silence_thresh=-40, keep_silence=100)            
+        audios = silence.split_on_silence(myaudio, min_silence_len=600, silence_thresh=-20, keep_silence=200)            
         for audio in audios:                    
             print('Removing silence on audio...')            
             audio.export('test.wav', format = "wav")            

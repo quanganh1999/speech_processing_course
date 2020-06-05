@@ -7,58 +7,56 @@ from PyQt5 import uic
 import voice_model
 import time
 
-class Ui(QtWidgets.QMainWindow):
+class Ui(QtWidgets.QMainWindow):    
     def __init__(self):
         super(Ui, self).__init__()
         uic.loadUi('app.ui', self)
         self.show()                
 
 class Controller():
+    recorder = None
+    is_record = False  
+
     def __init__(self, _model, _view):
         self.model = _model
         self.view = _view
         self._connectSignals()
     
-    def _setRecBut(self):        
-        dur = self.view.duration_box.value()
-        # self.view.status_block.setText("Recording...")        
-        self.model.record_sound("record.wav", duration = dur)        
-        self.view.status_block.setText("Finish recording") 
+    @staticmethod
+    def show_msg(title, msg):
+        QMessageBox.information(None, title, msg)       
 
-    def _setRemovBut(self):
-        # self.view.status_block.setText("Removing silence...")
-        self.model.remove_silence("record.wav", "test.wav")
-        self.view.status_block.setText("Finish processing") 
+    # Setting start recording
+    def _setRecBut(self):                
+        self.is_record = True
+        self.view.status_block.setText('Recording...')
+        valPath = "record.wav"
+        self.recorder = self.model.Recorder(channels = 2).open(valPath, 'wb')
+        self.recorder.start_recording()
 
+    # Setting stop recording:
+    def _setStopBut(self):
+        if(self.is_record):
+            self.is_record = False
+            self.recorder.stop_recording()
+            self.view.status_block.setText('Finish recording')
+        
     def _setPlayButOri(self):
         # self.view.status_block.setText("Playing...")
         self.model.play_sound("record.wav")
-        self.view.status_block.setText("Done...")
-
-    def _setPlayButPro(self):
-        # self.view.status_block.setText("Playing...")
-        self.model.play_sound("test.wav")
-        self.view.status_block.setText("Done...")
+        self.view.status_block.setText("Done...")    
 
     def _setPredButOri(self):
         # self.view.status_block.setText("Predicting...")
         word = self.model.predict_word("record.wav")        
-        self.view.status_block.setText("Done...")
+        self.view.status_block.setText("Finish predicting !")
         self.view.result_block.setText(word)
-
-    def _setPredButNew(self):
-        # self.view.status_block.setText("Predicting...")
-        word = self.model.predict_word("test.wav")        
-        self.view.status_block.setText("Done...")
-        self.view.result_block.setText(word)
-
+    
     def _connectSignals(self):                
         self.view.record_but.clicked.connect(self._setRecBut)
-        self.view.remove_sil_but.clicked.connect(self._setRemovBut)
-        self.view.play_but_1.clicked.connect(self._setPlayButOri)
-        self.view.play_but_2.clicked.connect(self._setPlayButPro)
-        self.view.predict_but_1.clicked.connect(self._setPredButOri)
-        self.view.predict_but_1.clicked.connect(self._setPredButNew)
+        self.view.stop_but.clicked.connect(self._setStopBut)        
+        self.view.play_but.clicked.connect(self._setPlayButOri)        
+        self.view.predict_but.clicked.connect(self._setPredButOri)        
 
 def main():    
     app = QApplication(sys.argv)
